@@ -8,6 +8,7 @@ public class ItemBelt : MonoBehaviour
 
     // c#에서 기본으로 제공하는 연결리스트, 아이템 이름을 string으로 저장
     LinkedList<string> itemBelt;
+    string lastUsedItem;
 
     void Start()
     {
@@ -47,6 +48,11 @@ public class ItemBelt : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.Space))
         {
             UseCurrentItem();
+        }
+
+        if(Input.GetKeyDown(KeyCode.R))
+        {
+            CreateItems();
         }
 
 
@@ -104,14 +110,36 @@ public class ItemBelt : MonoBehaviour
 
         // 현재 아이템 ( 첫번째 )의 이름을 가져오고
 		string currentItem = itemBelt.First.Value;
-        
-        
+		
+		// 마지막으로 사용한 아이템 저장
+		lastUsedItem = currentItem;
+
 		// Debug.Log($"아이템 사용: {currentItem}");
         // 첫번째 아이템을 제거한다.
         itemBelt.RemoveFirst();
 
 		PrintCurrentBeltState("아이템 사용 (Space)");
 	}
+
+
+    void CreateItems()
+	{
+		if(lastUsedItem == null)
+		{
+			Debug.Log("재생성할 아이템이 없습니다.");
+			return;
+		}
+
+		// 마지막으로 사용한 아이템을 맨 앞에 다시 추가
+		itemBelt.AddFirst(lastUsedItem);
+
+		PrintCurrentBeltState("아이템 생성 (R)");
+
+		// 여러 번 중복 생성되지 않도록 초기화
+		lastUsedItem = null;
+	}
+
+
 
 
 
